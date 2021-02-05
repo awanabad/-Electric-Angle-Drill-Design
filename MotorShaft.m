@@ -8,10 +8,10 @@ WHr=200.2;
 
 dB=1.083; %Gear pitch diameters
 
-%Shaft distances between points of interest
-L1=1.15; 
-L2=3.4;  
-Lf=2; %distance to critical fillet 
+%Shaft distances between points of interest, *********these were updated for the bearings***********
+L1=1.0862; 
+L2=2.5724;  
+Lf=1.0862; %distance to critical location
 
 %***********************************************
 %Reaction Forces
@@ -26,7 +26,7 @@ Tm= WHt*(dB/2); %Torque on shaft
 %Shear and Moment Diagrams
 subplot(3,2,1)
 x = linspace(0,L2); %Shear in x-z plane
-Vxz = -RAz*(x>=0)+WHt*(x>L1)-RBz*(x>L2);
+Vxz = -RAz*(x>=0)+WHt*(x>L1)-RBz*(x>=L2);
 plot(x,Vxz)
 title('Vxz')
 
@@ -36,7 +36,7 @@ plot(x,Mxz)
 title('Mxz')
 
 subplot(3,2,3) %Shear in x-y plane
-Vxy = -RAy*(x>=0)+WHr*(x>L1)-RBy*(x>L2);
+Vxy = -RAy*(x>=0)+WHr*(x>L1)-RBy*(x>=L2);
 plot(x,Vxy)
 title('Vxy')
 
@@ -98,7 +98,7 @@ d= ((16*n/pi)*(A/(se*10^3)+B/(Sut*10^3)))^(1/3);
 
 %***********************************************
 %New Dimensions
-dnew = 0.58; %Greater than trial diameter
+dnew = 0.5906; %Greater than trial diameter, *********this was updated for the bearings***********
 dr = 1.5; %D/d ratio
 D=dnew*dr;
 
@@ -127,9 +127,9 @@ SigmaM = sqrt(3)*16*Kfs*Tm/(pi * dnew^3); %Eq 7-6
 nf = (SigmaA/(Se*10^3) + SigmaM/(Sut*10^3))^-1; 
 
 %***********************************************
-fprintf('The minimum diameter for D2 and D4 is: (inches) %s\n', d') 
+fprintf('The minimum diameter at the critical location is: (inches) %s\n', d') 
 fprintf(1, '\n');
-fprintf('The selected diameter for D2 and D4 is: (inches) %s\n', dnew') 
+fprintf('The selected diameter for D1, D2, and D4 is: (inches) %s\n', dnew') 
 fprintf('The selected diameter for D3 is: (inches) %s\n', D')
 fprintf(1, '\n');
 fprintf('The alternating stress is: (psi) %s\n', SigmaA')

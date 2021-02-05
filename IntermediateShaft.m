@@ -5,48 +5,53 @@ clear all;
 %Computed Variables From Gear Code 
 WBt=725.6; %Gear Forces, bevel and helical
 WBr=118.1; 
+WHt=585.3;
+WHr=200.2;
 
 dB=1.5; %Gear pitch diameters
+dH=2.382; 
 
 %Shaft distances between points of interest
-L1=1; 
-L2=3;  
-Lf=1; %distance to critical location 
+L1=2.48;
+L2=5.33; %Helical Gear Loads
+L3=7.48; % 
+Lf=6.18; %distance to critical location
 
 %***********************************************
 %Reaction Forces
-RBy=(WBr*L1)/L2; %Sum of moments = 0
-RBz=(WBt*L1)/L2;
-RAy= WBr-RBy; %Sum of forces = 0
-RAz=WBt-RBz; 
-Tm= WBt*(dB/2); %Torque on shaft 
+RBy= (WBr*L1 + WHr*(L2-L1))/(L3-L1); %Sum of Moments = 0
+RBz=(WBt*L1 + WHt*(L2-L1))/(L3-L1);
+RAy = WBr - WHr + RBy; %Sum of Forces = 0
+RAz = WBt - WHt + RBz ;
+
+Tm= WBt*(dB/2); %Torque between gears
 
 %***********************************************
 %Shear and Moment Diagrams
 subplot(3,2,1)
-x = linspace(0,L2); %Shear in x-z plane
-Vxz = RAz*(x>=0)-WBt*(x>L1)+RBz*(x>=L2);
+x = linspace(0,L3); %Shear in x-z plane
+Vxz = WBt*(x>=0)-RAz*(x>L1)-WHt*(x>L2)+RBz*(x>=L3);
 plot(x,Vxz)
 xlabel ('Distance (in)');
 ylabel ('Shear (lbf)');
 title('Vxz')
 
 subplot(3,2,2) %Moment in x-z plane 
-Mxz = RAz*x-WBt*(x-L1).*(x>L1);
+Mxz = WBt*x-RAz*(x-L1).*(x>L1)-WHt*(x-L2).*(x>L2);
 plot(x,Mxz)
 xlabel ('Distance (in)');
 ylabel ('Moment (lbf*in)');
 title('Mxz')
 
 subplot(3,2,3) %Shear in x-y plane
-Vxy = RAy*(x>=0)-WBr*(x>L1)+RBy*(x>=L2);
+Vxy = WBr*(x>=0)-RAy*(x>L1)-WHr*(x>L2)+RBy*(x>=L3);
 plot(x,Vxy)
 xlabel ('Distance (in)');
 ylabel ('Shear (lbf)');
 title('Vxy')
 
 subplot(3,2,4) %Moment in x-y plane
-Mxy = RAy*x-WBr*(x-L1).*(x>L1);
+Mxy = WBr*x-RAy*(x-L1).*(x>L1)-WHr*(x-L2).*(x>L2);
 plot(x,Mxy)
 xlabel ('Distance (in)');
 ylabel ('Moment (lbf*in)');
@@ -106,10 +111,10 @@ B = sqrt(4*(kf*Mm)^2+3*(kfs*Tm)^2);
 d= ((16*n/pi)*(A/(se*10^3)+B/(Sut*10^3)))^(1/3);
 
 %***********************************************
-%New Dimensions
-dnew = 0.9; %Greater than trial diameter
-dr = 1.5; %D/d ratio
-D=dnew*dr;
+%New Dimensions                                     *********this was updated for the bearings***********
+dnew = 1.25; %Greater than trial diameter
+%dr = 1.5; %D/d ratio
+D=1.378;
 
 fr = 0.1; %r/d ratio
 r = dnew*fr;
